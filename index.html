@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <title>夜猫牌古筝</title>
+    <!-- 引入动画效果库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <!-- 音频资源预加载 -->
+    <link rel="prefetch" href="notes/a49.mp3" />
+    <link rel="prefetch" href="notes/a50.mp3" />
+    <link rel="prefetch" href="notes/a51.mp3" />
+    <link rel="prefetch" href="notes/a53.mp3" />
+    <link rel="prefetch" href="notes/a54.mp3" />
+    <link rel="prefetch" href="notes/a56.mp3" />
+    <link rel="prefetch" href="notes/a57.mp3" />
+    <link rel="prefetch" href="notes/a48.mp3" />
+    <link rel="prefetch" href="notes/a87.mp3" />
+    <link rel="prefetch" href="notes/a69.mp3" />
+    <link rel="prefetch" href="notes/a84.mp3" />
+    <link rel="prefetch" href="notes/a89.mp3" />
+    <link rel="prefetch" href="notes/a85.mp3" />
+    <link rel="prefetch" href="notes/a79.mp3" />
+    <link rel="prefetch" href="notes/a80.mp3" />
+    <link rel="prefetch" href="notes/a83.mp3" />
+    <link rel="prefetch" href="notes/a68.mp3" />
+    <link rel="prefetch" href="notes/a70.mp3" />
+    <link rel="prefetch" href="notes/a72.mp3" />
+    <link rel="prefetch" href="notes/a74.mp3" />
+    <link rel="prefetch" href="notes/a76.mp3" />
+    <style>
+        body {
+            margin: 0;
+            padding: 40px 0;
+            box-sizing: border-box;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            background-color: #804245;
+            background-image: url(bg.jpeg);
+            background-size: 100% 100%;
+        }
+
+        .string {
+            width: 100%;
+            height: 2px;
+            background: #ddd;
+            border-radius: 2px;
+            box-shadow: 3px 3px 15px 5px rgb(0 0 0 / 30%);
+        }
+
+        .string[data-order='3'],
+        .string[data-order='8'],
+        .string[data-order='13'],
+        .string[data-order='18'] {
+            background: #1ABC9C;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 一共21根弦，从下到上（1弦到21弦）：倍高音1, 5个高音，5个中音，5个低音，5个倍低音 -->
+    <div class="string animate__animated animate__fast" data-order="21"></div>
+    <div class="string animate__animated animate__fast" data-order="20"></div>
+    <div class="string animate__animated animate__fast" data-order="19"></div>
+    <div class="string animate__animated animate__fast" data-order="18"></div>
+    <div class="string animate__animated animate__fast" data-order="17"></div>
+    <div class="string animate__animated animate__fast" data-order="16"></div>
+    <div class="string animate__animated animate__fast" data-order="15"></div>
+    <div class="string animate__animated animate__fast" data-order="14"></div>
+    <div class="string animate__animated animate__fast" data-order="13"></div>
+    <div class="string animate__animated animate__fast" data-order="12"></div>
+    <div class="string animate__animated animate__fast" data-order="11"></div>
+    <div class="string animate__animated animate__fast" data-order="10"></div>
+    <div class="string animate__animated animate__fast" data-order="9"></div>
+    <div class="string animate__animated animate__fast" data-order="8"></div>
+    <div class="string animate__animated animate__fast" data-order="7"></div>
+    <div class="string animate__animated animate__fast" data-order="6"></div>
+    <div class="string animate__animated animate__fast" data-order="5"></div>
+    <div class="string animate__animated animate__fast" data-order="4"></div>
+    <div class="string animate__animated animate__fast" data-order="3"></div>
+    <div class="string animate__animated animate__fast" data-order="2"></div>
+    <div class="string animate__animated animate__fast" data-order="1"></div>
+
+    <!-- 加载音符映射表 -->
+    <script src="notesMap.js"></script>
+    <script>
+        let u = navigator.userAgent.toLowerCase();
+        let isIOS = /iphone|ipad|ipod|ios/i.test(u);
+        // 初始化音频对象
+        let note = new Audio();
+
+        // 兼容苹果手机，好像必须手动触发一个事件，才可以初始化一共音频对象
+        if (isIOS) {
+            function addAudio() {
+                note = new Audio();
+                document.removeEventListener('touchstart', addAudio, false);
+            }
+            document.addEventListener('touchstart', addAudio, false);
+        }
+
+        // 拿到21根琴弦
+        let dom = document.querySelectorAll('.string')
+        // 为每根琴弦绑定事件
+        dom.forEach((_dom, i) => {
+            _dom.addEventListener('click', e => {
+                // 每次都重新赋值音乐源，这样就能从头开始播放音符
+                note.src = notesMap[e.target.dataset.order][2];
+                // 更新音频源
+                note.load();
+                // 播放音乐
+                note.play();
+                // 添加动画效果
+                e.target.classList.add('animate__shakeY');
+            })
+            _dom.addEventListener('animationend', e => {
+                // 移除动画效果
+                e.target.classList.remove('animate__shakeY');
+            })
+        })        
+    </script>
+</body>
+
+</html>
